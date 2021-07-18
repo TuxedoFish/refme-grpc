@@ -8,6 +8,8 @@ To get started:
 
 ```git clone --recurse-submodules -j8 git@github.com:TuxedoFish/refme-grpc.git```
 
+Then fill in the details within the .env file
+
 Then to run the server locally:
 
 ```make run```
@@ -16,7 +18,7 @@ Then to run the server locally:
 
 To run the tests:
 
-```go test -v -run TestArticlesServer_GetArticles ./internal/articles```
+```gotestsum --format testname```
 
 # Updating services
 
