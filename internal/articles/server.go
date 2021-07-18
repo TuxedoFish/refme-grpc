@@ -14,17 +14,21 @@ type ArticlesServer struct {
 func (*ArticlesServer) GetArticles(ctx context.Context, req *pb.ArticlesPageRequest) (*pb.ArticlesPageResponse, error) {
 	fmt.Printf("GetArticles called with: %v \n", req)
 
+	// Setup the providers
+	providers := []*pb.Provider{
+		&pb.Provider{Name: "x5gon", Weight: 0, Amount: 0},
+		&pb.Provider{Name: "arXiv", Weight: 0.5, Amount: 0},
+		&pb.Provider{Name: "springer", Weight: 0.5, Amount: 0},
+	}
+	// Use D'Hondt method to split
+	splitArray(providers, 10)
+
 	res := pb.ArticlesPageResponse{
 		Meta: &pb.Meta{
-			Providers: []*pb.Provider{
-				&pb.Provider{
-					Name:   "x5gon",
-					Weight: 0.5,
-				},
-			},
-			Query:   req.QueryString,
-			Page:    *req.Page,
-			Results: 1,
+			Providers: providers,
+			Query:     req.QueryString,
+			Page:      *req.Page,
+			Results:   1,
 		},
 		Results: []*pb.Result{
 			&pb.Result{

@@ -12,6 +12,7 @@ message ArticlesPageRequest {
 message Provider {
     string name = 1;
     float weight = 2;
+    int32 amount = 3;
 }
 
 message Meta {

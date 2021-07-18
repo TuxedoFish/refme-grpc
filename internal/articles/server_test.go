@@ -2,7 +2,6 @@ package articles
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 	"testing"
@@ -52,9 +51,13 @@ func TestArticlesServer_GetArticles(t *testing.T) {
 		response, err := client.GetArticles(ctx, request)
 
 		if err != nil {
-			log.Fatalln("server_Test.TestArticlesServer_GetArticles: error when getting articles, ", err)
+			t.Log("server_Test.TestArticlesServer_GetArticles: error when getting articles, ", err)
 		}
 
-		fmt.Println("server_Test.TestArticlesServer_GetArticles: received response, ", response)
+		// Check response has 10 results
+		actualNumberOfResults := len(response.GetResults())
+		if actualNumberOfResults != 10 {
+			t.Error("error: expected", 10, "results received", actualNumberOfResults)
+		}
 	})
 }
