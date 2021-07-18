@@ -1,0 +1,3 @@
+[submodule "refme-protobuf"]
+	path = refme-protobuf
+	url = https://github.com/TuxedoFish/refme-protobuf
