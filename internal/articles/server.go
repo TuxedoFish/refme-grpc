@@ -20,23 +20,18 @@ func (*ArticlesServer) GetArticles(ctx context.Context, req *pb.ArticlesPageRequ
 
 	// Setup the providers
 	providers := []*pb.Provider{
-		&pb.Provider{Name: "x5gon", Weight: 0, Amount: 0},
 		&pb.Provider{Name: "arXiv", Weight: 0.5, Amount: 0},
 		&pb.Provider{Name: "springer", Weight: 0.5, Amount: 0},
 	}
 	// Use D'Hondt method to split
 	splitArray(providers, 10)
-	// Get results from the three providers
 	if providers[0].Amount != 0 {
-		// X5GON Request (Deprecated)
+		// ArXiv Request
+		results = append(results, apis.GetArXivArticles(query, int(providers[0].Amount), int(*page))...)
 	}
 	if providers[1].Amount != 0 {
-		// ArXiv Request
-		results = append(results, apis.GetArXivArticles(query, int(providers[1].Amount), int(*page))...)
-	}
-	if providers[2].Amount != 0 {
 		// Springer Request
-		results = append(results, apis.GetSpringerArticles(query, int(providers[2].Amount), int(*page))...)
+		results = append(results, apis.GetSpringerArticles(query, int(providers[1].Amount), int(*page))...)
 	}
 	numberOfResults := int32(len(results))
 

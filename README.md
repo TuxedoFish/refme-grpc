@@ -53,7 +53,7 @@ message ArticlesPageResponse {
 }
 ```
 
-This is done by making requests to 3 APIs using the D'Hondt splitting system to decide based on weightings how to split the request up. The 3 APIs are x5gon, arXiv and springer. arXiv is an example of an API that returns XML which requires unmarshalling in order to use. Both x5gon and springer send back to json the only difference being springer requires an API key.
+This is done by making requests to 2 APIs using the D'Hondt splitting system to decide based on weightings how to split the request up. The 2 APIs are arXiv and springer. arXiv is an example of an API that returns XML which requires unmarshalling in order to use. Springer sends back responses in json and requires an API key.
 
 # Running tests
 
