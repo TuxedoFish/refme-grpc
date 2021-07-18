@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package articles;
+
+option go_package = "./articlespb/"; 
+
+message ArticlesPageRequest {
+    string query_string = 1;
+    optional int32 page = 2;
+}
+
+message Provider {
+    string name = 1;
+    float weight = 2;
+}
+
+message Meta {
+    repeated Provider providers = 1;
+    string query = 2;
+    int32 page = 3;
+    int32 results = 4;
+}
+
+message Result {
+    string id = 1;
+    string author = 2;
+    string title = 3;
+    string published_date = 4;
+    string publisher = 5;
+    string description = 6;
+    string url = 7;
+}
+
+message ArticlesPageResponse {
+    Meta meta = 1;
+    repeated Result results = 2;
+}
+
+service ArticlesPageService {
+   rpc GetArticles(ArticlesPageRequest) returns (ArticlesPageResponse) {} 
+}
