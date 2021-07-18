@@ -10,10 +10,16 @@ To get started:
 
 Then to run the server locally:
 
-```go run service.go```
+```make run```
+
+# Running tests
+
+To run the tests:
+
+```go test -v -run TestArticlesServer_GetArticles ./internal/articles```
 
 # Updating services
 
 In the event that it is needed to update the services due to a protobuffer change:
 
-```./generate.sh```
+```make build```

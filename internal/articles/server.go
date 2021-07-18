@@ -12,6 +12,6 @@ type ArticlesServer struct {
 }
 
 func (*ArticlesServer) GetArticles(ctx context.Context, req *pb.ArticlesPageRequest) (*pb.ArticlesPageResponse, error) {
-	fmt.Printf("GetArticles called with: %v", req)
+	fmt.Printf("GetArticles called with: %v \n", req)
 	return nil, nil
 }
