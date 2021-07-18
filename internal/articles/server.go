@@ -13,5 +13,31 @@ type ArticlesServer struct {
 
 func (*ArticlesServer) GetArticles(ctx context.Context, req *pb.ArticlesPageRequest) (*pb.ArticlesPageResponse, error) {
 	fmt.Printf("GetArticles called with: %v \n", req)
-	return nil, nil
+
+	res := pb.ArticlesPageResponse{
+		Meta: &pb.Meta{
+			Providers: []*pb.Provider{
+				&pb.Provider{
+					Name:   "x5gon",
+					Weight: 0.5,
+				},
+			},
+			Query:   req.QueryString,
+			Page:    *req.Page,
+			Results: 1,
+		},
+		Results: []*pb.Result{
+			&pb.Result{
+				Id:            "Test",
+				Author:        "Test",
+				Title:         "Test",
+				PublishedDate: "Test",
+				Publisher:     "Test",
+				Description:   "Test",
+				Url:           "Test",
+			},
+		},
+	}
+
+	return &res, nil
 }
