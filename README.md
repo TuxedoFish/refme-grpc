@@ -70,3 +70,13 @@ Or to run an individual test suite:
 In the event that it is needed to update the services due to a protobuffer change:
 
 ```make build```
+
+# Running envoy
+
+To build the envoy image:
+
+```docker build -t grpc-medium-envoy:1.0 .```
+
+To run the envoy image:
+
+```docker run --network=host grpc-medium-envoy:1.0```
