@@ -11,27 +11,29 @@ import (
 	pb "github.com/TuxedoFish/refme-grpc/pkg/proto/articlespb"
 )
 
-type URL struct {
+type ArxivURL struct {
 	Link        string `xml:"href,attr"`
 	ContentType string `xml:"type,attr"`
 }
 
-type Article struct {
-	Id            string   `xml:"id"`
-	Title         string   `xml:"title"`
-	PublishedDate string   `xml:"published"`
-	Description   string   `xml:"summary"`
-	URLs          []URL    `xml:"link"`
-	Authors       []string `xml:"author>name"`
+type ArxivArticle struct {
+	Id            string     `xml:"id"`
+	Title         string     `xml:"title"`
+	PublishedDate string     `xml:"published"`
+	Description   string     `xml:"summary"`
+	URLs          []ArxivURL `xml:"link"`
+	Authors       []string   `xml:"author>name"`
 }
 
-type Feed struct {
-	Articles []Article `xml:"entry"`
+type ArxivFeed struct {
+	Articles []ArxivArticle `xml:"entry"`
 }
 
+/*
+   Get a set of arxiv articles into a standard format
+   Example: http://export.arxiv.org/api/query?search_query=all:carbon%20nanotube&start=0&max_results=5
+*/
 func GetArXivArticles(query_string string, amount int, page int) []*pb.Result {
-	// This request will return 10 by default -
-	// So the page needs to be 10 % amount (amount = 3, page = 2, truepage = (3 * (2 - 1)) % 10 = 0)
 	url_template := "https://export.arxiv.org/api/query?search_query=%[1]v&max_results=%[2]v&start=%[3]v"
 	url := fmt.Sprintf(url_template, query_string, amount, (page-1)*amount)
 	fmt.Printf("Making request to: %v \n", url)
@@ -58,7 +60,7 @@ func GetArXivArticles(query_string string, amount int, page int) []*pb.Result {
 	}
 
 	// Unmarshal returned XML
-	var dataAsXML Feed
+	var dataAsXML ArxivFeed
 	xml.Unmarshal(data, &dataAsXML)
 
 	// Loop over putting them into Result objects
@@ -73,7 +75,7 @@ func GetArXivArticles(query_string string, amount int, page int) []*pb.Result {
 
 		newArticle := pb.Result{
 			Id:            article.Id,
-			Author:        strings.Join(article.Authors[:], ","),
+			Author:        strings.Join(article.Authors[:], ";"),
 			Title:         article.Title,
 			PublishedDate: article.PublishedDate,
 			Publisher:     "arXiv",

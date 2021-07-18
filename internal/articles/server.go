@@ -36,6 +36,7 @@ func (*ArticlesServer) GetArticles(ctx context.Context, req *pb.ArticlesPageRequ
 	}
 	if providers[2].Amount != 0 {
 		// Springer Request
+		results = append(results, apis.GetSpringerArticles(query, int(providers[2].Amount), int(*page))...)
 	}
 	numberOfResults := int32(len(results))
 
