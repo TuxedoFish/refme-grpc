@@ -1,21 +1,14 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net"
 
+	"github.com/TuxedoFish/refme-grpc/internal/articles"
 	"github.com/TuxedoFish/refme-grpc/pkg/proto/articlespb"
 	"google.golang.org/grpc"
 )
-
-type server struct{}
-
-func (*server) GetArticles(ctx context.Context, req *articlespb.ArticlesPageRequest) (*articlespb.ArticlesPageResponse, error) {
-	fmt.Printf("GetArticles called with: %v", req)
-	return nil, nil
-}
 
 func main() {
 	HOST := "0.0.0.0"
@@ -30,7 +23,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	articlespb.RegisterArticlesPageServiceServer(s, &server{})
+	articlespb.RegisterArticlesPageServiceServer(s, &articles.ArticlesServer{})
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
