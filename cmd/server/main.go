@@ -14,9 +14,8 @@ import (
 
 func main() {
 	godotenv.Load()
-	HOST := os.Getenv("SVC_HOST")
-	PORT := os.Getenv("SVC_PORT")
-	address := fmt.Sprintf("%[1]s:%[2]s", HOST, PORT)
+	PORT := os.Getenv("PORT")
+	address := fmt.Sprintf(":%[1]s", PORT)
 
 	fmt.Printf("Starting service (%v)...\n", address)
 	lis, err := net.Listen("tcp", address)

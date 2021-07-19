@@ -20,3 +20,6 @@ bin/
 
 # .env file
 .env
+
+# Output from envoy
+tmp/

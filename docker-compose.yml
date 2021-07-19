@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file: .env
+  envoy:
+    build: ./envoy
+    ports:
+      - "10000:10000"
+      - "9901:9901"
+    depends_on: 
+      - api
