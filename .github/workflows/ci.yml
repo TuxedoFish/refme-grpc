@@ -6,6 +6,10 @@
 name: Deploy to Amazon ECS
 
 on:
+  # TEST: For validating workflow 
+  push:
+    branches:
+      - feature/add-workflow
   release:
     types: [ created ]
 
