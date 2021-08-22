@@ -17,7 +17,7 @@ env:
   AWS_REGION: eu-west-2 
   ECR_ENVOY_REPOSITORY: refme-envoy-container     
   ECR_API_REPOSITORY: refme-api-v2-container      
-  ECS_TASK_DEFINITION: .aws/service-task-definiton 
+  ECS_TASK_DEFINITION: .aws/service-task-definiton.json
   ECS_SERVICE: refme-api-service 
   ECS_CLUSTER: personal-projects 
 
