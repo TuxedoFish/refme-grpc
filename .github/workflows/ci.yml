@@ -6,10 +6,6 @@
 name: Deploy to Amazon ECS
 
 on:
-  # TEST: For validating workflow 
-  push:
-    branches:
-      - feature/add-workflow
   release:
     types: [ created ]
 
@@ -31,11 +27,9 @@ jobs:
       contents: read
 
     steps:
-      # Checkout the files
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Use GitHub secrets to configure credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
         with:
@@ -43,13 +37,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # Login to ECR using aws-actions
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
 
-      # Build and tag the envoy image and push them to AWS
-      - name: Build, tag, and push envoy to Amazon ECR
+      - name: Build, tag, and push Envoy to Amazon ECR
         id: build-envoy-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -62,8 +54,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_ENVOY_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_ENVOY_REPOSITORY:$IMAGE_TAG"
 
-      # Build and tag the api image and push them to AWS
-      - name: Build, tag, and push envoy to Amazon ECR
+      - name: Build, tag, and push API to Amazon ECR
         id: build-api-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
