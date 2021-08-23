@@ -10,5 +10,7 @@ services:
     ports:
       - "80:80"
       - "8081:8081"
+    environment: 
+      - "ENVOY_UID=0"
     depends_on: 
       - api
