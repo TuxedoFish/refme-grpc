@@ -38,6 +38,11 @@ type SpringerFeed struct {
 	Records []SpringerRecords `json:"records"`
 }
 
+type Config struct {
+  PORT string
+  SPRINGER_API_KEY string
+}
+
 /*
    Get a set of Springer articles
    http://api.springernature.com/openaccess/json?api_key=66d2a126a14009044fb70d5781ebb284&q=Carbon Nanotube
@@ -47,7 +52,12 @@ type SpringerFeed struct {
 */
 func GetSpringerArticles(query_string string, amount int, page int) []*pb.Result {
 	start := (amount * (page - 1)) + 1
-	api_key := os.Getenv("SPRINGER_API_KEY")
+	
+	configJson := os.Getenv("CONFIG")
+	var config Config 
+	json.Unmarshal([]byte(configJson), &config)
+	api_key := config.SPRINGER_API_KEY
+	
 	url_template := "http://api.springernature.com/openaccess/json?q=%[1]v&p=%[2]v&s=%[3]v&api_key=%[4]v"
 	url := fmt.Sprintf(url_template, query_string, amount, start, api_key)
 	fmt.Printf("Making request to: %v \n", url)
