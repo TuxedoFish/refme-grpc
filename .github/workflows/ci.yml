@@ -17,8 +17,11 @@ env:
   AWS_REGION: eu-west-2 
   ECR_ENVOY_REPOSITORY: refme-envoy-container     
   ECR_API_REPOSITORY: refme-api-v2-container      
+  ECR_ENVOY_PROXY_REPOSITORY: envoy-proxy-container 
   ECS_TASK_DEFINITION: .aws/service-task-definition.json
+  ECS_PROXY_TASK_DEFINITION: .aws/proxy-task-definition.json
   ECS_SERVICE: refme-api-service 
+  ECS_PROXY_SERVICE: personal-projects 
   ECS_CLUSTER: personal-projects 
 
 defaults:
@@ -57,7 +60,7 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_ENVOY_REPOSITORY:$IMAGE_TAG envoy/
+          docker build -t $ECR_REGISTRY/$ECR_ENVOY_REPOSITORY:$IMAGE_TAG envoy/sidecar
           docker push $ECR_REGISTRY/$ECR_ENVOY_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_ENVOY_REPOSITORY:$IMAGE_TAG"
 
@@ -95,5 +98,34 @@ jobs:
         with:
           task-definition: ${{ steps.task-def-api.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+      - name: Build, tag, and push Envoy Front Proxy to Amazon ECR
+        id: build-envoy-proxy-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_ENVOY_PROXY_REPOSITORY:$IMAGE_TAG envoy/front-proxy
+          docker push $ECR_REGISTRY/$ECR_ENVOY_PROXY_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_ENVOY_PROXY_REPOSITORY:$IMAGE_TAG"
+
+      - name: Fill in the new image ID for the Envoy Proxy in the Amazon ECS task definition
+        id: task-def-envoy-proxy
+        uses: aws-actions/amazon-ecs-render-task-definition@97587c9d45a4930bf0e3da8dd2feb2a463cf4a3a
+        with:
+          task-definition: ${{ env.ECS_PROXY_TASK_DEFINITION }}
+          container-name: ${{ env.ECR_ENVOY_PROXY_REPOSITORY }}
+          image: ${{ steps.build-envoy-proxy-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition for Proxy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@de0132cf8cdedb79975c6d42b77eb7ea193cf28e
+        with:
+          task-definition: ${{ steps.task-def-envoy-proxy.outputs.task-definition }}
+          service: ${{ env.ECS_PROXY_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
