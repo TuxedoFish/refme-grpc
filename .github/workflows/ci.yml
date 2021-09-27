@@ -20,7 +20,7 @@ env:
   ECR_ENVOY_PROXY_REPOSITORY: envoy-proxy-container 
   ECS_TASK_DEFINITION: .aws/service-task-definition.json
   ECS_PROXY_TASK_DEFINITION: .aws/proxy-task-definition.json
-  ECS_SERVICE: refme-api-service 
+  ECS_SERVICE: refme-api-service
   ECS_PROXY_SERVICE: envoy-proxy-service 
   ECS_CLUSTER: personal-projects 
 

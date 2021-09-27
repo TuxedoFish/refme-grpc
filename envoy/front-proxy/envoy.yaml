@@ -61,7 +61,7 @@ static_resources:
               routes:
               - match: { prefix: "/refme" }
                 route:
-                  cluster: articles_service
+                  cluster: refme_service_external
                   max_stream_duration:
                     grpc_timeout_header_max: 0s
               cors:
@@ -76,7 +76,7 @@ static_resources:
           - name: envoy.filters.http.cors
           - name: envoy.filters.http.router
   clusters:
-  - name: refme_service
+  - name: refme_service_external
     connect_timeout: 0.25s
     type: logical_dns
     lb_policy: round_robin
