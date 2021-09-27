@@ -41,10 +41,15 @@ static_resources:
   - name: refme_service_external
     connect_timeout: 0.25s
     type: logical_dns
-    lb_policy: round_robin
     http2_protocol_options: {}
-    hosts:
-    - socket_address:
-        # this is the ecs service discovery endpoint for our service 
-        address: refme_service.ecs
-        port_value: 80
+    lb_policy: round_robin
+    # Refers to the address of the refme service discovery endpoint
+    load_assignment:
+      cluster_name: cluster_0
+      endpoints:
+        - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: refme_service.ecs
+                    port_value: 80
