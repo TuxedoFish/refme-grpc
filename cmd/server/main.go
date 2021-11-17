@@ -10,6 +10,7 @@ import (
 	"github.com/TuxedoFish/refme-grpc/pkg/proto/articlespb"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -26,6 +27,8 @@ func main() {
 
 	s := grpc.NewServer()
 	articlespb.RegisterArticlesPageServiceServer(s, &articles.ArticlesServer{})
+	// Register reflection service on gRPC server.
+	reflection.Register(s)
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
