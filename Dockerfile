@@ -13,5 +13,6 @@ COPY . .
 
 RUN go build -race -ldflags "-s -w" -o bin/server cmd/server/main.go
 
+EXPOSE 8080
 CMD ["bin/server"]
 	
