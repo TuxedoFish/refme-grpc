@@ -15,7 +15,7 @@ import (
 func main() {
 	godotenv.Load()
 	PORT := os.Getenv("PORT")
-	address := fmt.Sprintf(":%[1]s", PORT)
+	address := fmt.Sprintf("0.0.0.0:%[1]s", PORT)
 
 	fmt.Printf("Starting service (%v)...\n", address)
 	lis, err := net.Listen("tcp", address)
