@@ -9,6 +9,10 @@ services:
     build: ./envoy
     ports:
       - "10000:10000"
-      - "9901:9901"
+      - "8801:8801"
     depends_on: 
       - api
+    environment:
+      - SERVICE_DISCOVERY_PORT=8080
+      - SERVICE_DISCOVERY_ADDRESS=host.docker.internal
+      - LISTEN_PORT=10000

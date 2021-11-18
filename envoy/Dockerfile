@@ -1,5 +1,10 @@
 FROM envoyproxy/envoy:v1.17.0
 
-COPY ./envoy.yaml /etc/envoy/envoy.yaml
+COPY start-envoy.sh /start-envoy.sh
+COPY envoy.yaml /tmpl/envoy.yaml
 
-CMD /usr/local/bin/envoy -c /etc/envoy/envoy.yaml
+RUN chmod +x /start-envoy.sh
+RUN apt-get update && \
+    apt-get install gettext -y
+
+ENTRYPOINT ["/start-envoy.sh"]
