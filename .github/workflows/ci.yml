@@ -39,7 +39,7 @@ jobs:
       - name: Build and push envoy proxy Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./envoy/staging
+          context: ./envoy
           push: true
           tags: ${{ steps.meta-envoy-proxy.outputs.tags }}
           labels: ${{ steps.meta-envoy-proxy.outputs.labels }}
